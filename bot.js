@@ -1,6 +1,6 @@
 var HTTPS = require('https');
 
-var botID = process.env.BOT_ID;
+var botID = 'c4827fce94b5c43d0a71fa7d7a';
 
 const fs = require('fs');
 
@@ -9,8 +9,13 @@ var in_array = require('in-array');
 var mysql = require('mysql');
 var async = require('async');
 
-db_url = process.env.CLEARDB_DATABASE_URL;
-var conn = mysql.createConnection(db_url);
+var conn = mysql.createConnection({
+  host     : process.env.OPENSHIFT_MYSQL_DB_HOST,
+  port     : process.env.OPENSHIFT_MYSQL_DB_PORT,
+  user     : 'mysql_user',
+  password : 'mysql_pass',
+  database : 'mysql_dbname'
+ });
 
 var cc_ = require('./clash_caller.js');
 

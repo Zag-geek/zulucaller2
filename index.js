@@ -11,8 +11,13 @@ var async = require('async');
 var moment = require('moment');
 
 
-db_url = process.env.CLEARDB_DATABASE_URL;
-var conn = mysql.createConnection(db_url);
+var conn = mysql.createConnection({
+  host     : process.env.OPENSHIFT_MYSQL_DB_HOST,
+  port     : process.env.OPENSHIFT_MYSQL_DB_PORT,
+  user     : 'mysql_user',
+  password : 'mysql_pass',
+  database : 'mysql_dbname'
+});
 
 
 router = new director.http.Router({
@@ -45,8 +50,13 @@ server = http.createServer(function(req, res) {
   });
 });
 
-port = Number(process.env.PORT || 5000);
-server.listen(port);
+ipaddress = process.env.OPENSHIFT_NODEJS_IP;
+port = process.env.OPENSHIFT_NODEJS_PORT || 8080;		
+
+server.listen(port, ipaddress, function() {
+	console.log('%s: Node server started on %s:%d ...',
+				Date(Date.now() ), ipaddress, port);
+});
 
 function setup_db() {
   var message_ = [];
